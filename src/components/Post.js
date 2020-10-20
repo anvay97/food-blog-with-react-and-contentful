@@ -6,7 +6,7 @@ const Post = ({ foodArticle }) => {
     const postDescription = marked(description)
     return (
         <div className='post'>
-            <h3 className='title'>{name}</h3>
+            <h1 className='title'>{name}</h1>
             {featuredImage && <img className='featuredImage' src={featuredImage.fields.file.url} alt={name} title={name} />}
             <section dangerouslySetInnerHTML={{ __html: postDescription }} />
         </div>
