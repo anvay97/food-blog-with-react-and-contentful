@@ -1,20 +1,18 @@
 import React from 'react';
 import  {BrowserRouter as Router, Redirect, Route} from 'react-router-dom';
+import { documentToHtmlString } from '@contentful/rich-text-html-renderer';
 import './App.css';
 import Home from './components/Home';
 import Posts from './components/Posts'
 import Navbar from './components/Navbar';
 import Single from './components/Single';
 import Books from './components/Books';
+import { client } from './client';
+import Person from './components/Person';
 
 const query = `
-
 {
-    recipesCollection(order: [name_ASC], where:{
-      AND:[
-        {name_contains: "Pizza"}
-      ]
-    }) {
+    recipesCollection{
       total
       items {
         name
@@ -22,9 +20,11 @@ const query = `
           title
           url
         }
-        description
-      }
-      
+        description,
+        summary{
+            json
+          }
+      } 
     }
     booksCollection  
  {
@@ -43,8 +43,7 @@ const query = `
             url
           }
           authorBio
-        }
-      
+        }   
     }
     }
   }  
@@ -56,11 +55,11 @@ class App extends React.Component {
         articles: [],
         books: [],
         bookCount: 0,
-        articleCount: 0
+        articleCount: 0,
+        renderedHtml: null
 
     }
 
-   
     componentDidMount() {
             window.fetch(
                 `https://graphql.contentful.com/content/v1/spaces/${REACT_APP_SPACE_ID}`,
@@ -85,6 +84,21 @@ class App extends React.Component {
                     });
                 })
                 .catch(error=> console.log(error));
+
+                // client.getEntry('6vY8n3oSX2cW0cTnYIWkY6')
+                // .then(entry=>{
+                //     const rawRichTextField = entry.fields.summary;
+                //     console.log(rawRichTextField);
+                //     // console.log(entry);
+                //     return documentToHtmlString(rawRichTextField);
+                // })
+                // .then(renderedHtml => {
+                //     // do something with html, like write to a file
+                //     console.log(renderedHtml);
+                //     this.setState({renderedHtml: renderedHtml});
+                //     document.getElementById('rich-text-body').innerHTML = renderedHtml;
+                //   })
+                //   .catch(error => console.log(error));
             
     }
 
@@ -97,7 +111,10 @@ class App extends React.Component {
                         <Route path="/home" component={Home} />
                         <Route path="/recipes" render={()=> <Posts posts={this.state.articles} articleCount={this.state.articleCount} /> } />
                         <Route path="/books" render={()=> <Books books={this.state.books} bookCount={this.state.bookCount} /> } />
+                        <Route path="/persons" render={()=> <Person summary={this.state.renderedHtml} /> } />
                         <Route path="/detail" component={Single} />
+                    {/* <div id="rich-text-body"></div> */}
+
                 </div>
             </Router>
         );
