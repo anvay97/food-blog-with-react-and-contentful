@@ -1,41 +1,107 @@
 import React from 'react';
+import  {BrowserRouter as Router, Redirect, Route} from 'react-router-dom';
 import './App.css';
-import { client } from './client';
+import Home from './components/Home';
 import Posts from './components/Posts'
+import Navbar from './components/Navbar';
+import Single from './components/Single';
+import Books from './components/Books';
+
+const query = `
+
+{
+    recipesCollection(order: [name_ASC], where:{
+      AND:[
+        {name_contains: "Pizza"}
+      ]
+    }) {
+      total
+      items {
+        name
+        featuredImage {
+          title
+          url
+        }
+        description
+      }
+      
+    }
+    booksCollection  
+ {
+      total
+      items {
+        bookName
+        bookImage {
+          title
+          url
+        }
+        bookDescription
+        author {
+          authorName
+          authorImage {
+            title
+            url
+          }
+          authorBio
+        }
+      
+    }
+    }
+  }  
+`
+const {REACT_APP_SPACE_ID,REACT_APP_ACCESS_TOKEN} = process.env;
 
 class App extends React.Component {
     state = {
-        articles: []
+        articles: [],
+        books: [],
+        bookCount: 0,
+        articleCount: 0
+
     }
 
+   
     componentDidMount() {
-        client.getEntries({ content_type: 'recipes' })
-            .then((res) => {
-                console.log(res)
-                this.setState({
-                    articles: res.items
+            window.fetch(
+                `https://graphql.contentful.com/content/v1/spaces/${REACT_APP_SPACE_ID}`,
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${REACT_APP_ACCESS_TOKEN}`
+                    },
+                    body: JSON.stringify({ query }),
+                }
+            ).then(res => res.json())
+                .then(({data}) =>{ 
+                    console.log(data);
+                    this.setState({
+                        articles: data.recipesCollection.items,
+                        articleCount: data.recipesCollection.total});
+                    this.setState({
+                        books: data.booksCollection.items,
+                        bookCount: data.booksCollection.total
+
+                    });
                 })
-            })
-            .catch(console.error)      
+                .catch(error=> console.log(error));
+            
     }
 
     render() {
         return (
-            <div className="App">
-                <div className='container'>
-                    <header>
-                        <div className='wrapper'>
-                            <span className='logo'>React and Contentful</span>
-                        </div>
-                    </header>
-                    <main>
-                        <div className='wrapper'>
-                            <Posts posts={this.state.articles} />
-                        </div>
-                    </main>
+            <Router>
+                <div className="App">
+                    <Navbar/>
+                        <Redirect to="/home" /> 
+                        <Route path="/home" component={Home} />
+                        <Route path="/recipes" render={()=> <Posts posts={this.state.articles} articleCount={this.state.articleCount} /> } />
+                        <Route path="/books" render={()=> <Books books={this.state.books} bookCount={this.state.bookCount} /> } />
+                        <Route path="/detail" component={Single} />
                 </div>
-            </div>
+            </Router>
         );
+        
     }
 }
 

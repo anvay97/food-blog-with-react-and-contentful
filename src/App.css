@@ -10,8 +10,8 @@ body {
   color: #455;
   line-height: 1.5;
   font-family: "Muli", sans-serif;
-  background-color: blueviolet;
-  background-image: url(./images/bg.png);
+  background-color: white;
+  /* background-image: url(./images/bg.png); */
   background-repeat: no-repeat;
   background-size: cover;
   background-position: 0 0;
