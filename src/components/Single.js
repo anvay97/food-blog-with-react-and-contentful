@@ -1,6 +1,5 @@
-import React, { Component, useState } from 'react'
+import React, { Component } from 'react'
 import { client } from '../client';
-import { useEffect } from 'react'
 
 
 class Single extends Component {
