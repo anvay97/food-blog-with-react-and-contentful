@@ -9,59 +9,64 @@ import Books from './components/Books';
 
 const query = `
 {
-    recipesCollection{
-      total
-      items {
-        name
-        featuredImage {
-          title
-          url
+        recipesCollection{
+          total
+          items {
+            sys{
+              id
+            }
+            name
+            featuredImage {
+              title
+              url
+            }
+            description,
+            summary{
+                json
+              }
+          } 
         }
-        description,
-        summary{
-            json
-          }
-      } 
-    }
-    booksCollection(where:{
-      AND:[
-        {bookName_contains: "The Ultimate Gift"}
-      ]
-    })  
- {
-      total
-      items {
-        bookName
-        bookImage {
-          title
-          url
+        booksCollection 
+     {
+          total
+          items {
+            bookName
+            bookImage {
+              title
+              url
+            }
+            bookDescription
+            author {
+              authorName
+              authorImage {
+                title
+                url
+              }
+              authorBio
+            }   
         }
-        bookDescription
-        author {
-          authorName
-          authorImage {
-            title
-            url
+        }
+        navigationCollection{
+            items{
+              navlink
+            }
           }
-          authorBio
-        }   
-    }
-    }
-  }  
+      }    
 `
-const {REACT_APP_SPACE_ID,REACT_APP_ACCESS_TOKEN} = process.env;
+const {REACT_APP_SPACE_ID,REACT_APP_ACCESS_TOKEN, REACT_APP_GRAPHQL_API_URL} = process.env;
 
 class App extends React.Component {
     state = {
         articles: [],
         books: [],
+        navLinks: [],
         bookCount: 0,
         articleCount: 0
     }
 
     componentDidMount() {
             window.fetch(
-                `https://graphql.contentful.com/content/v1/spaces/${REACT_APP_SPACE_ID}`,
+                `${REACT_APP_GRAPHQL_API_URL}${REACT_APP_SPACE_ID}`,
                 {
                     method: "POST",
                     headers: {
@@ -79,8 +84,10 @@ class App extends React.Component {
                     this.setState({
                         books: data.booksCollection.items,
                         bookCount: data.booksCollection.total
-
                     });
+                    this.setState({
+                        navLinks: data.navigationCollection.items
+                    })
                 })
                 .catch(error=> console.log(error));
 
@@ -88,6 +95,7 @@ class App extends React.Component {
     }
 
     render() {
+        // console.log(this.state.articles);
         return (
             <Router>
                 <div className="App">
@@ -96,7 +104,7 @@ class App extends React.Component {
                         <Route path="/home" component={Home} />
                         <Route path="/recipes" render={()=> <Posts posts={this.state.articles} articleCount={this.state.articleCount} /> } />
                         <Route path="/books" render={()=> <Books books={this.state.books} bookCount={this.state.bookCount} /> } />
-                        <Route path="/detail" component={Single} />
+                        <Route path="/food/:food_id" component={Single} />
                 </div>
             </Router>
         );

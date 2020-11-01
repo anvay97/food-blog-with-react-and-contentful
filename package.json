@@ -8,6 +8,7 @@
         "@testing-library/react": "^9.5.0",
         "@testing-library/user-event": "^7.2.1",
         "contentful": "^7.14.8",
+        "contentful-entry-removal": "^1.0.4",
         "dotnet": "^1.1.4",
         "html-react-parser": "^0.14.0",
         "marked": "^1.1.0",
