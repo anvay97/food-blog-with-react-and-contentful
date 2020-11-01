@@ -32,10 +32,11 @@ class Single extends Component {
     render() {
 
         let description = localStorage.getItem('description');
+        const postDescription = marked(description);
+
         // let summary = localStorage.getItem('summary');
         // console.log(this.state.sum);
         // console.log(this.state.des);
-        const postDescription = marked(description)
 
         // const rawRichTextField = summary;
         // let richTextSummary = documentToHtmlString(rawRichTextField);
