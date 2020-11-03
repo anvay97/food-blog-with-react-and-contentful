@@ -10,7 +10,7 @@ class Single extends Component {
         food: null,
         des: null,
         // sum: null
-    }
+    } 
 
     componentDidMount() {
         let id = this.props.match.params.food_id;
