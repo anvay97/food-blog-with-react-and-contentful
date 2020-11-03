@@ -53,7 +53,7 @@ const query = `
           }
       }    
 `
-const {REACT_APP_SPACE_ID,REACT_APP_ACCESS_TOKEN, REACT_APP_GRAPHQL_API_URL} = process.env;
+const {REACT_APP_SPACE_ID,REACT_APP_ACCESS_TOKEN} = process.env;
 
 class App extends React.Component {
     state = {
@@ -66,7 +66,7 @@ class App extends React.Component {
 
     componentDidMount() {
             window.fetch(
-                `${REACT_APP_GRAPHQL_API_URL}${REACT_APP_SPACE_ID}`,
+                `https://graphql.contentful.com/content/v1/spaces/${REACT_APP_SPACE_ID}`,
                 {
                     method: "POST",
                     headers: {
