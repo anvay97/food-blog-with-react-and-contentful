@@ -9,23 +9,24 @@ import Books from './components/Books';
 
 const query = `
 {
-        recipesCollection{
-          total
-          items {
-            sys{
-              id
+    recipesCollection{
+        total
+        items {
+          sys{
+            id
+          }
+          name
+          featuredImage {
+            title
+            url
+          }
+          description,
+          location
+          summary{
+              json
             }
-            name
-            featuredImage {
-              title
-              url
-            }
-            description,
-            summary{
-                json
-              }
-          } 
-        }
+        } 
+      }
         booksCollection 
      {
           total
