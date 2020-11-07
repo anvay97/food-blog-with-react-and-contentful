@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { client } from '../client';
-import marked from 'marked';
+// import marked from 'marked';
 import { documentToHtmlString } from '@contentful/rich-text-html-renderer';
 import parse from 'html-react-parser';
 
@@ -33,8 +33,8 @@ class Single extends Component {
     render() {
 
         let summary;
-       let description = localStorage.getItem('description');
-        const postDescription = marked(description);
+        // let description = localStorage.getItem('description');
+        // const postDescription = marked(description);
             
             if(this.state.sum)
                 summary = this.state.sum;
@@ -56,7 +56,7 @@ class Single extends Component {
                     <h1 className='title'>{this.state.food.fields.name}</h1>
                     {this.state.food.fields.featuredImage && <img className='featuredImage' src={this.state.food.fields.featuredImage.fields.file.url} alt={this.state.food.fields.name} />}
                      
-                     { <section dangerouslySetInnerHTML={{ __html: postDescription }} /> }
+                     {/* { <section dangerouslySetInnerHTML={{ __html: postDescription }} /> } */}
                     <section id="rich-text-body">
                         <h1>Summary : </h1>
                         {foodSummary}
