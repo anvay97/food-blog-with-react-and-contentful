@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import { client } from '../client';
 import marked from 'marked';
 import { documentToHtmlString } from '@contentful/rich-text-html-renderer';
 import parse from 'html-react-parser';
@@ -13,22 +12,16 @@ class Single extends Component {
     }
 
     componentDidMount() {
-        let id = this.props.match.params.food_id;
+        let foodObj = this.props.location.food;
+        localStorage.setItem('summary', JSON.stringify(foodObj.summary.json));
+        localStorage.setItem('description', JSON.stringify(foodObj.description));
+     
 
-
-
-        client.getEntry(id).then(res => {
-            localStorage.setItem('summary', JSON.stringify(res.fields.summary));
-            localStorage.setItem('description', JSON.stringify(res.fields.description));
-
-
-            this.setState({
-                food: res,
-                des: JSON.parse(localStorage.getItem('description')),
-                sum: JSON.parse(localStorage.getItem('summary'))
-            })
+        this.setState({
+            food: foodObj,
+            des: JSON.parse(localStorage.getItem('description')),
+            sum: JSON.parse(localStorage.getItem('summary')),
         })
-            .catch(err => console.log(err))
     }
 
 
@@ -63,8 +56,8 @@ class Single extends Component {
             this.state.food ? (
                 <div className='post'>
 
-                    <h1 className='title'>{this.state.food.fields.name}</h1>
-                    {this.state.food.fields.featuredImage && <img className='featuredImage' src={this.state.food.fields.featuredImage.fields.file.url} alt={this.state.food.fields.name} />}
+                    <h1 className='title'>{this.state.food.name}</h1>
+                    {this.state.food.featuredImage && <img className='featuredImage' src={this.state.food.featuredImage.url} alt={this.state.food.name} />}
 
                     { <section dangerouslySetInnerHTML={{ __html: description }} />}
                     <section id="rich-text-body">

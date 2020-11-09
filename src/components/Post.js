@@ -3,11 +3,13 @@ import {Link} from 'react-router-dom';
 
 const Post = ({ foodArticle }) => {
     const {name,featuredImage} = foodArticle;
-    // console.log(foodArticle.sys.id);
 
     return (
         <div className='post'>
-            <Link to={`food/${foodArticle.sys.id}`}>
+            <Link to={{
+                pathname: `food/${foodArticle.sys.id}`,
+                food: foodArticle
+            }}>
                     <h1 className='title'>{name}</h1>
             </Link>
             {featuredImage && <img className='featuredImage' src={featuredImage.url} alt={name} />}
