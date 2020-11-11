@@ -7,7 +7,7 @@ const Post = ({ foodArticle }) => {
     return (
         <div className='post'>
             <Link to={{
-                pathname: `food/${foodArticle.sys.id}`,
+                pathname: `food/${foodArticle.name}`,
                 food: foodArticle
             }}>
                     <h1 className='title'>{name}</h1>
