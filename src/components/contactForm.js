@@ -1,93 +1,43 @@
 import React, { Component } from 'react'
-// import * as contentful from 'contentful';
-// import { client } from '../client';
-
-// const client = contentful.createClient({
-//     accessToken: 'CFPAT-IwIyhhTn8IQfjS_squdd4edxZ40KpnUm2XBpmpOujeY'
-//   })
 
 const {REACT_APP_SPACE_ID, REACT_APP_CMA_TOKEN} = process.env;
 
 class Form extends Component {
     state = {
-        fullName: null,
-        email: null,
-        subject: null,
-        message: null,
-
-        // formData:{
-        //     "fields": {
-        //       "fullName": {
-        //         "en-US": this.state.fullName
-        //       },
-        //       "eMailAddress":{
-        //         "en-US": this.state.email
-        //       },
-        //       "subject":{
-        //         "en-US": this.state.subject
-        //       },
-        //       "message":{
-        //         "en-US": this.state.message
-        //       }
-        //     }
-
-        // formData:{
-        //     "fields": {
-        //       "fullName": this.state.fullName,
-        //       "eMailAddress":this.state.email,
-        //       "subject":this.state.subject,
-        //       "message":this.state.message
-        //     }
+        fullName: '',
+        email: '',
+        subject: '',
+        message: '',
     }
 
-    formData={
-        "fields": {
-          "fullName": {
-            "en-US": ""
-          },
-          "eMailAddress":{
-            "en-US": ""
-          },
-          "subject":{
-            "en-US": ""
-          },
-          "message":{
-            "en-US": ""
-          }
-        }
-    }
+    // formData={
+    //     "fields": {
+    //       "fullName": {
+    //         "en-US": ""
+    //       },
+    //       "eMailAddress":{
+    //         "en-US": ""
+    //       },
+    //       "subject":{
+    //         "en-US": ""
+    //       },
+    //       "message":{
+    //         "en-US": ""
+    //       }
+    //     }
+    // }
     
 
     handleChange = (e) => {
         this.setState({
             [e.target.id]: e.target.value.trim(),
-            formData:{
-                "fields": {
-                  "fullName": {
-                    "en-US": this.state.fullName
-                  },
-                  "eMailAddress":{
-                    "en-US": this.state.email
-                  },
-                  "subject":{
-                    "en-US": this.state.subject
-                  },
-                  "message":{
-                    "en-US": this.state.message
-                  }
-                }
-            }
         });
     }
 
 
     
     handleSubmit = (e) => {
-
-        let formData = this.state.formData;
-        console.log(formData);
         e.preventDefault();
-        // console.log(this.state); 
             window.fetch(
                 `https://api.contentful.com/spaces/${REACT_APP_SPACE_ID}/entries`,
                 {
@@ -97,31 +47,42 @@ class Form extends Component {
                         Authorization: `Bearer ${REACT_APP_CMA_TOKEN}`,
                         "X-Contentful-Content-Type": "contactForm"
                     },
-                    body: JSON.stringify({ formData }),
+                    body: JSON.stringify({ fields: {
+                        fullName: {
+                          "en-US": this.state.fullName
+                        },
+                        eMailAddress:{
+                          "en-US": this.state.email
+                        },
+                        subject:{
+                          "en-US": this.state.subject
+                        },
+                        message:{
+                          "en-US": this.state.message
+                        }
+                      } }),
                 }
             ).then(res => console.log(res))
                 .catch(error=> console.log(error));
+                alert('Thank You For Your Response');
+                // this.refreshForm();
 
-        // client.getSpace(REACT_APP_SPACE_ID)
-        //     .then((space) => space.getEnvironment('master'))
-        //     .then((environment) => environment.createEntry('contactForm', formData))
-        //     .then((entry) => console.log(entry))
-        //     .catch(console.error)
+
+       
     }
 
-    
     render() {
         return (
             <div>
                 <form onSubmit={this.handleSubmit}>
                     <label htmlFor="Full Name" placeholder="Full Name">Full Name:</label>
-                    <input type="text" id="fullName" onChange={this.handleChange} />
+                    <input type="text" id="fullName" onChange={this.handleChange} value={this.state.fullName} />
                     <label htmlFor="Email" placeholder="Email Address">Email:</label>
-                    <input type="text" id="email" onChange={this.handleChange} />
+                    <input type="text" id="email" onChange={this.handleChange} value={this.state.email} />
                     <label htmlFor="Subject">Subject : </label>
-                    <input type="text" id="subject" onChange={this.handleChange} />
+                    <input type="text" id="subject" onChange={this.handleChange} value={this.state.subject} />
                     <label htmlFor="Message">Message : </label>
-                    <input type="text" id="message" onChange={this.handleChange} />
+                    <input type="text" id="message" onChange={this.handleChange} value={this.state.message} />
                     <button>Send Message</button>
                 </form>
             </div>

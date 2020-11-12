@@ -91,12 +91,9 @@ class App extends React.Component {
                     })
                 })
                 .catch(error=> console.log(error));
-
-
     }
 
     render() {
-        // console.log(this.state.articles);
         return (
             <Router>
                 <div className="App">
@@ -105,7 +102,7 @@ class App extends React.Component {
                         <Route path="/home" component={Home} />
                         <Route path="/recipes" render={()=> <Posts posts={this.state.articles} articleCount={this.state.articleCount} /> } />
                         <Route path="/books" render={()=> <Books books={this.state.books} bookCount={this.state.bookCount} /> } />
-                        <Route path="/food/:food_id" component={Single} />
+                        <Route path="/food/:food_name" component={Single} />
                 </div>
             </Router>
         );

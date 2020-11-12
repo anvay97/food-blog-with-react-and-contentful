@@ -16,7 +16,6 @@ class Single extends Component {
         localStorage.setItem('summary', JSON.stringify(foodObj.summary.json));
         localStorage.setItem('description', JSON.stringify(foodObj.description));
      
-
         this.setState({
             food: foodObj,
             des: JSON.parse(localStorage.getItem('description')),
